@@ -34,8 +34,22 @@
 {% endmacro %}
 {% macro archive() %}
 <aside class="panel archive" id="review-area"><h2>批次复核</h2><ul id="history"></ul>
+  <form id="supplement" hidden aria-label="晚到取消补录">
+    <p class="form-title">晚到取消补录</p>
+    <div class="supplement-grid">
+      <label>记录键<input name="record" maxlength="36" placeholder="可留空自动生成"></label>
+      <label>业务组<input name="case" maxlength="36" placeholder="单组可留空"></label>
+      <label>号源<input name="slot" type="number" min="0" required></label>
+      <label>原占用者<input name="attendee" type="number" min="0" required></label>
+      <label>发生分钟<input name="minute" type="number" min="0" required></label>
+    </div>
+    <button type="submit">补录并复算</button>
+    <p id="supplement-notice" role="status"></p>
+  </form>
   <form id="review" hidden>
-    <p id="run-status"></p><label for="note">复核意见</label>
+    <p id="run-status"></p>
+    <p class="issue-conclusion">签发结论：<strong id="decision-text">待复核</strong></p>
+    <label for="note">复核意见</label>
     <textarea id="note" name="note" minlength="3" maxlength="200" required></textarea>
     <div class="review-actions"><button name="decision" value="HELD">暂缓</button><button class="action" name="decision" value="APPROVED">签发</button></div>
     <a id="evidence">下载复核证据</a>

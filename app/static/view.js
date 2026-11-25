@@ -41,7 +41,9 @@ const fieldLabels = {matched:'匹配关系', unmet:'未覆盖', loads:'磅单明
   visible:'可见记录', removed:'删除记录', dangling:'悬空删除', grades:'传播级别', approved:'已批准降级',
   expired:'已过期审批', schedule:'排程', rejected:'未排入', curve:'剩余比例', horizon:'观察时点',
   suppressed:'遮蔽单元格', exposed:'可反推', compatible:'通过字段', violations:'差异字段',
-  occupied:'占用号源', promoted:'候补转入', invalid_cancels:'无效取消', route:'到站路径',
+  occupied:'占用号源', promoted:'候补转入', placements:'本批补位', slot:'号源', attendee:'人员', person:'人员',
+  minute:'发生分钟', wait_record:'候补记录', cancellation_record:'取消记录', case_minute:'处理分钟',
+  invalid_cancels:'无效取消', route:'到站路径',
   pings:'采信定位', missing:'缺站', pairs:'样本对', failed:'未通过', clusters:'归并分组',
   blocked:'阻止合并', forecast:'预测需求', reorder:'补货点', unserved:'未满足', requested:'总需求',
   orders:'到货安排', closing:'期末库存', producer_reject_bp:'生产方拒收基点数', consumer_accept_bp:'使用方接收基点数',
@@ -101,7 +103,10 @@ export function snapshot(report, selected, stage) {
   table.createTHead().append(head);
   const picked = report.cases?.find(row=>row.case===selected);
   document.querySelector('#detail-title').textContent = picked ? `分组 ${picked.case}` : '采信摘要';
-  const shown = picked ? picked.measure?.evidence ?? picked.prep?.details ?? {原因:picked.status} : stats.reasons;
+  let shown = picked ? picked.measure?.evidence ?? picked.prep?.details ?? {原因:picked.status} : stats.reasons;
+  if (picked?.measure?.placements?.length) {
+    shown = {...shown, placements: picked.measure.placements};
+  }
   document.querySelector('#detail').replaceChildren(detailValue(shown));
   document.querySelector('#counts').textContent = report.balance ? `行数 ${report.balance.accounted}/${report.balance.input} · ${report.balance.ready} 组通过` : `采信 ${stats.accepted} 行 · 隔离 ${stats.rejected} 行`;
 }
